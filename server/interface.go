@@ -18,7 +18,7 @@ var (
 
 func Start() {
 	server = asynq.NewServer(
-		asynq.RedisClientOpt{Addr: constant.RedisAddr},
+		asynq.RedisClientOpt{Addr: constant.RedisAddr, Password: constant.RedisPass},
 		asynq.Config{
 			// Specify how many concurrent workers to use
 			Concurrency: 10,

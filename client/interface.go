@@ -10,7 +10,7 @@ import (
 var client *asynq.Client
 
 func init() {
-	client = asynq.NewClient(asynq.RedisClientOpt{Addr: constant.RedisAddr})
+	client = asynq.NewClient(asynq.RedisClientOpt{Addr: constant.RedisAddr, Password: constant.RedisPass})
 }
 
 func EnqueueContext(ctx context.Context, task *asynq.Task) error {

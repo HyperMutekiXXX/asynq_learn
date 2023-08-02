@@ -25,11 +25,11 @@ func (o *OrderTask) ProcessTask(ctx context.Context, task *asynq.Task) error {
 	}
 
 	tmp := order.OrderMap[orderData.Id]
-	if tmp.Status != 1 {
+	if tmp.Status != constant.PayWait {
 		return nil
 	}
 
-	tmp.Status = 2
+	tmp.Status = constant.PayTimeOut
 
 	itemData := item.ItemMap[tmp.ItemId]
 	atomic.AddInt64(&itemData.Num, 1)

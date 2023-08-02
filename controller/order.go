@@ -2,6 +2,7 @@ package controller
 
 import (
 	"asynq_learn/client"
+	"asynq_learn/constant"
 	"asynq_learn/model/item"
 	"asynq_learn/model/order"
 	"asynq_learn/tasks"
@@ -43,7 +44,7 @@ func (o *Order) Buy(ctx *gin.Context) {
 	atomic.AddInt64(&itemData.Num, -1)
 	id := order.GetAtId()
 	tmp.Id = id
-	tmp.Status = 1
+	tmp.Status = constant.PayWait
 	order.OrderMap[id] = tmp
 	task := tasks.NewOrderTask()
 	err = client.EnqueueContext(ctx, task.GenOrderTask(tmp))
@@ -70,7 +71,11 @@ func (o *Order) Pay(ctx *gin.Context) {
 		return
 	}
 	orderData := order.OrderMap[tmp.Id]
-	orderData.Status = 4
+	if orderData.Status != 1 {
+		o.Error(ctx, fmt.Sprintf("订单ID[%v],已取消或者已支付", orderData.Id))
+		return
+	}
+	orderData.Status = constant.PayOk
 	o.Success(ctx, "支付成功", nil)
 }
 
@@ -82,6 +87,17 @@ func (o *Order) Cancel(ctx *gin.Context) {
 		return
 	}
 	orderData := order.OrderMap[tmp.Id]
-	orderData.Status = 3
+	if orderData.Status != 1 {
+		o.Error(ctx, fmt.Sprintf("订单ID[%v],已取消或者已支付", orderData.Id))
+		return
+	}
+	orderData.Status = constant.PayCancel
+	itemData, ok := item.ItemMap[orderData.ItemId]
+	if !ok {
+		o.Error(ctx, fmt.Sprintf("商品ID[%v]不存在", orderData.ItemId))
+		return
+	}
+	atomic.AddInt64(&itemData.Num, 1)
+
 	o.Success(ctx, "取消成功", nil)
 }

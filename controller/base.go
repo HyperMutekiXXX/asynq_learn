@@ -21,7 +21,7 @@ func (c *Controller) Success(ctx *gin.Context, msg string, data any) {
 }
 
 func (c *Controller) Error(ctx *gin.Context, msg string) {
-	ctx.JSON(http.StatusBadRequest, gin.H{
+	ctx.JSON(http.StatusOK, gin.H{
 		"code": http.StatusBadRequest,
 		"msg":  msg,
 	})
