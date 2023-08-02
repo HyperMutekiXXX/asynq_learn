@@ -50,5 +50,5 @@ func (o *OrderTask) GenOrderTask(order *order.Order) *asynq.Task {
 		return nil
 	}
 	delay := time.Minute * 1
-	return asynq.NewTask(constant.OrderMission, marshal, asynq.ProcessIn(delay))
+	return asynq.NewTask(constant.OrderMission, marshal, asynq.ProcessIn(delay), asynq.MaxRetry(10), asynq.Timeout(delay))
 }

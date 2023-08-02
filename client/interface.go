@@ -13,8 +13,8 @@ func init() {
 	client = asynq.NewClient(asynq.RedisClientOpt{Addr: constant.RedisAddr, Password: constant.RedisPass})
 }
 
-func EnqueueContext(ctx context.Context, task *asynq.Task) error {
-	info, err := client.EnqueueContext(ctx, task)
+func EnqueueContext(ctx context.Context, task *asynq.Task, opt ...asynq.Option) error {
+	info, err := client.EnqueueContext(ctx, task, opt...)
 	if err != nil {
 		log.Printf("could not enqueue task: %v", err)
 		return err
