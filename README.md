@@ -4,14 +4,14 @@
 支付超时案例
 ```
 asynq_learn
-├─client
+├─client // 生产者
 ├─constant
 ├─controller
 ├─model
 │  ├─item
 │  ├─order
 │  └─user
-├─server
-├─tasks
+├─server // 消费者
+├─tasks // 在这里写不同的任务
 └─test
 ```
