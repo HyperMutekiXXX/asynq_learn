@@ -37,7 +37,7 @@ func TestClient(t *testing.T) {
 
 	info, err = client.Enqueue(task, asynq.ProcessIn(24*time.Hour))
 	if err != nil {
-		log.Fatalf("could not schedule task: %v", err)
+		log.Fatalf("could not scheduled task: %v", err)
 	}
 	log.Printf("enqueued task: id=%s queue=%s", info.ID, info.Queue)
 
